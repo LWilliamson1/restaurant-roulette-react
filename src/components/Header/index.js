@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
-
+import {Navbar, Nav, NavItem} from 'react-bootstrap';
+import './Header.css';
 
 class Header extends Component {
     navigateHome = (state) =>{
