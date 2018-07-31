@@ -1,7 +1,6 @@
 {
   "name": "restaurant-roulette-react",
   "version": "0.1.0",
-  "config":{"port": "3006"},
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
@@ -15,7 +14,7 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "start": "PORT=OPENSHIFT_NODEJS_PORT && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
