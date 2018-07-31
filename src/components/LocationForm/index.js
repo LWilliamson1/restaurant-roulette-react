@@ -45,7 +45,7 @@ class LocationForm extends Component {
         this.setState({addressLine2: e.target.value})
     }
 
-    catchResponse = (resp, status, pagination) => {
+    handleRestaurantList = (resp, status, pagination) => {
         console.log(resp);
         this.setState({
             restaurant: this.state.restaurants.push(...resp)
@@ -56,7 +56,7 @@ class LocationForm extends Component {
         if(pagination.hasNextPage) {
             pagination.nextPage();
         } else { 
-             const { lat, lng, addressLine1, addressLine2, zipcode, city, state } = this.state;
+            const { lat, lng, addressLine1, addressLine2, zipcode, city, state } = this.state;
             this.props.history.push({
                 pathname:`/restaurants/${this.state.place_id}`,
                 state: { startLocation: {lat, lng, addressLine1, addressLine2, zipcode, city, state } }
@@ -75,7 +75,7 @@ class LocationForm extends Component {
         type: ['restaurant'],
         location: loc
         };
-        service.nearbySearch(request, this.catchResponse);
+        service.nearbySearch(request, this.handleRestaurantList);
     }
 
 
