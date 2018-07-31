@@ -5,7 +5,7 @@ import './Header.css';
 class Header extends Component {
     navigateHome = (state) =>{
         this.props.history.push({
-            pathname:`/`,
+            pathname:`${process.env.PUBLIC_URL}/`,
             state: { startLocation: state.startLocation}
         })
     }

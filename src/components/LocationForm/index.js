@@ -96,7 +96,8 @@ class LocationForm extends Component {
     }
 
     navigateToPlace = props => {
-        this.props.history.push(`/restaurants/${this.state.place_id}`);
+        console.log(process.env.PUBLIC_URL)
+        this.props.history.push(`${process.env.PUBLIC_URL}/restaurants/${this.state.place_id}`);
     }
     componentWillMount = () => {
         if(this.props.location.state && this.props.location.state.startLocation) {
