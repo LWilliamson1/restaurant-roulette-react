@@ -22,7 +22,7 @@ class LocationForm extends Component {
         restaurants: [],
         place_id: '',
         spinDisabled: false,
-        isDoneFetching: false
+        isFetching: false
     }
 
     setZipcode = e => {
@@ -53,29 +53,44 @@ class LocationForm extends Component {
         const { restaurants } = this.state;
         let restaurant = restaurants[Math.floor(Math.random() * restaurants.length)];
         this.setState({name: restaurant.name, place_id: restaurant.place_id});
-        if(pagination.hasNextPage) {
-            pagination.nextPage();
-        } else { 
+        // if(pagination.hasNextPage) {
+        //     pagination.nextPage();
+        // } else { 
             const { lat, lng, addressLine1, addressLine2, zipcode, city, state } = this.state;
+            this.setState({isFetching: false})
             this.props.history.push({
-                pathname:`/restaurants/${this.state.place_id}`,
-                state: { startLocation: {lat, lng, addressLine1, addressLine2, zipcode, city, state } }
+                pathname:`${process.env.PUBLIC_URL}/restaurants/${this.state.place_id}`,
+                state: { 
+                    startLocation: {lat, lng, addressLine1, addressLine2, zipcode, city, state }
+                    
+                }
             })
             // this.setState({isDoneFetching: true})
-        }
+        // }
     }
 
     updateRestaurant = () => {
         const google = window.google;
-        const { lat, lng } = this.state;
-        var loc = new google.maps.LatLng(lat, lng)
-        var service = new google.maps.places.PlacesService(document.createElement('div'));
-        var request = {
-        radius: '4828',
-        type: ['restaurant'],
-        location: loc
-        };
-        service.nearbySearch(request, this.handleRestaurantList);
+        this.setState({isFetching: true})
+        this.getLatLng().then(response => {
+            console.log(response);
+            if(response.data.results.length) { 
+                this.setState({ ...response.data.results[0].geometry.location });
+                const { lat, lng } = this.state;
+                var loc = new google.maps.LatLng(lat, lng)
+                var service = new google.maps.places.PlacesService(document.createElement('div'));
+                var request = {
+                    radius: '4828',
+                    type: ['restaurant'],
+                    location: loc
+                };
+                service.nearbySearch(request, this.handleRestaurantList);
+            } else {
+                this.setState({isFetching: false})
+            //display error
+            }
+        });
+
     }
 
 
@@ -83,16 +98,7 @@ class LocationForm extends Component {
         const { zipcode, addressLine1, addressLine2, city, state } = this.state;
         let param = `${addressLine1} ${addressLine2} ${zipcode} ${city} ${state}`;
         param = param.replace(/ /g, '+');
-        axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${param}&key=${API_KEY}`)
-        .then(response => {
-            console.log(response);
-            if(response.data.results.length) { 
-            this.setState({ ...response.data.results[0].geometry.location });
-            this.updateRestaurant();
-            } else {
-            //display error
-            }
-        });
+        return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${param}&key=${API_KEY}`);
     }
 
     navigateToPlace = props => {
@@ -138,12 +144,12 @@ class LocationForm extends Component {
                 <input id="zipcode" className="form-control" type="text" value={zipcode}  onChange={this.setZipcode} maxLength="5"/>
             </div>
             </div>
-            <Button bsStyle="primary" onClick={this.getLatLng}>Get Restaurant</Button>
-            {
+            <Button bsStyle="primary" onClick={this.updateRestaurant} disabled={ this.state.isFetching }>Get Restaurant</Button>
+            {/* {
                 this.state.isDoneFetching
                 &&
                 this.navigateToPlace(this.props)
-            }
+            } */}
         </form>
         </div>
         )

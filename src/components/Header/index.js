@@ -23,8 +23,11 @@ class Header extends Component {
         <Navbar.Brand>
             <a onClick={() => this.navigateHome(location.state)}>Restaurant Roulette</a>
         </Navbar.Brand>
+        {   address &&
         <Navbar.Toggle/>
+        }
         </Navbar.Header>
+        {   address &&
         <Navbar.Collapse>
         {/* <Nav>
             <NavItem eventKey={1} href="#">
@@ -42,13 +45,13 @@ class Header extends Component {
             </NavDropdown>
         </Nav> */}
         <Nav pullRight>
-            {   address &&
+
                 <NavItem eventKey={2} onClick={() => this.navigateHome(location.state)}>
                     My Address: { address }
                 </NavItem>
-            }
         </Nav>
         </Navbar.Collapse>
+        }
     </Navbar>
 
     </div>

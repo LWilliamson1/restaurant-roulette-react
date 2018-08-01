@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+// import {Button} from 'react-bootstrap';
 
 import FontAwesome from 'react-fontawesome';
 import './RestaurantDetail.css';
@@ -111,6 +112,9 @@ class LocationForm extends Component {
         }
     }
 
+    // updateRestaurant = () => {
+    // }
+
     componentDidMount() {
         this.getDetails();
     }
@@ -156,6 +160,9 @@ class LocationForm extends Component {
                     </div>
                 </div>
                 <div className="row">
+                    {/* <div className="col-xs-12">
+                        <Button bsStyle="primary" onClick={this.updateRestaurant}>Get Restaurant</Button>
+                    </div> */}
                 <div id="map" className="col-xs-12"></div>
                 {  typeof location === 'object' && this.renderMap()
                 }
