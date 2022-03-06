@@ -1,27 +1,31 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
 import './Header.css';
 
-class Header extends Component {
-    navigateHome = (state) =>{
-        this.props.history.push({
+function Header (props) {
+    const {location} = props
+    const [address, setAddress] = ('')
+
+    const navigateHome = (state) =>{
+        props.history.push({
             pathname:`${process.env.PUBLIC_URL}/`,
-            state: { startLocation: state.startLocation}
+            state//: { startLocation: state?.startLocation}
         })
     }
-    render() {
-    const {location} = this.props
-    var address;
-    if(location.state && location.state.startLocation){
-        const { addressLine1, addressLine2, zipcode, city, state } = location.state.startLocation;
-        address =  addressLine1 || addressLine2 || city || state || zipcode;
-    }
+    useEffect(() => {
+        if(location.state && location.state.startLocation){
+            const { addressLine1, addressLine2, zipcode, city, state } = location.state.startLocation;
+            setAddress(addressLine1 || addressLine2 || city || state || zipcode)
+        }
+    }, [])
+    
+
     return (
     <div>
-    <Navbar inverse collapseOnSelect staticTop>
+    <Navbar  collapseOnSelect staticTop>
         <Navbar.Header>
         <Navbar.Brand>
-            <a onClick={() => this.navigateHome(location.state)}>Restaurant Roulette</a>
+            <a onClick={()=>navigateHome(location.state)}>Restaurant Roulette</a>
         </Navbar.Brand>
         {   address &&
         <Navbar.Toggle/>
@@ -46,16 +50,17 @@ class Header extends Component {
         </Nav> */}
         <Nav pullRight>
 
-                <NavItem eventKey={2} onClick={() => this.navigateHome(location.state)}>
+                <NavItem eventKey={2} onClick={()=>navigateHome(location.state)}>
                     My Address: { address }
                 </NavItem>
+                
         </Nav>
         </Navbar.Collapse>
         }
     </Navbar>
 
     </div>
-    )}
+    )
 }
 
 export default Header;

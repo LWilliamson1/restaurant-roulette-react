@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 
 import Main from '../Main'
@@ -6,20 +6,21 @@ import config from '../config';
 
 const API_KEY = config.API_KEY;
 
-class App extends Component {
-
-  state = {
-    scriptLoaded: false
-  }
+function App() {
+  const [scriptLoaded, setScriptLoaded] = useState(false);
   
-
-  setScriptLoaded = () => {
-    this.setState({scriptLoaded: true})
+  const loadMapsApi = () => {
+    return new_script(`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`);
   }
 
-  new_script(src) {
+  useEffect(async () => {
+    await loadMapsApi()
+    setScriptLoaded(true)
+  }, [])
+
+  const new_script = (src) => {
     return new Promise(function(resolve, reject){
-      var script = document.createElement('script');
+      const script = document.createElement('script');
       script.src = src;
       script.addEventListener('load', function () {
         resolve();
@@ -31,29 +32,17 @@ class App extends Component {
     })
   };
 
-  loadMapsApi = () => {
-      var script = this.new_script(`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`);
-      return script;
-  }
 
-  componentDidMount () {
 
-  }
-
-  render() {
-    if(!this.state.scriptLoaded) {
-      this.loadMapsApi().then(() => this.setScriptLoaded())
-    }
-    return (
+  return (
       <div className="App">
         {
-          this.state.scriptLoaded
+          scriptLoaded
           &&
           <Main />
         }
       </div>
     );
-  }
 }
 
 export default App;

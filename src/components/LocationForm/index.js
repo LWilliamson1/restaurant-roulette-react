@@ -47,6 +47,7 @@ class LocationForm extends Component {
 
     handleRestaurantList = (resp, status, pagination) => {
         console.log(resp);
+        resp = resp.filter(obj => !obj.types.includes('gas_station'))
         this.setState({
             restaurant: this.state.restaurants.push(...resp)
         });
