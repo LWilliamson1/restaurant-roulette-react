@@ -25,7 +25,7 @@ function Header (props) {
     <Navbar inverse collapseOnSelect staticTop>
         <Navbar.Header>
         <Navbar.Brand>
-            <a onClick={()=>navigateHome(location.state)}>Restaurant Roulette!!</a>
+            <a onClick={()=>navigateHome(location.state)}>Restaurant Roulette</a>
         </Navbar.Brand>
         {   address &&
         <Navbar.Toggle/>
