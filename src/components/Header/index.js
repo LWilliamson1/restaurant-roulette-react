@@ -22,7 +22,7 @@ function Header (props) {
 
     return (
     <div>
-    <Navbar  collapseOnSelect staticTop>
+    <Navbar inverse collapseOnSelect staticTop>
         <Navbar.Header>
         <Navbar.Brand>
             <a onClick={()=>navigateHome(location.state)}>Restaurant Roulette</a>
