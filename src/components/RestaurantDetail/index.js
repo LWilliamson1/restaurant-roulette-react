@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 
 import FontAwesome from 'react-fontawesome';
 import './RestaurantDetail.css';
+import { getCachedRestaurant, setCachedRestaurant } from '../../utils/restaurantCache';
 // import {Button} from 'react-bootstrap'; import axios from 'axios'; const
 
 function getPriceLevel(price) {
@@ -52,21 +53,33 @@ class LocationForm extends Component {
                 ? photos[0].getUrl({'maxWidth': 1200, 'maxHeight': 675})
                 : '';
 
+            let details = {name, price_level, rating, location, photo_source: photoUrl, formatted_phone_number, formatted_address};
+
             if(opening_hours && opening_hours.weekday_text) {
                 let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                 let day = days[new Date().getDay()];
                 let hours = opening_hours.weekday_text.filter((value) => {
                     return value.includes(day);
                 });
-                this.setState({opening_hours: hours[0].slice(hours[0].indexOf(':')+2)})
+                details.opening_hours = hours[0].slice(hours[0].indexOf(':')+2);
             }
-            this.setState({name, price_level, rating, location, photo_source: photoUrl, formatted_phone_number, formatted_address})
+
+            const {id} = this.props.match.params;
+            setCachedRestaurant(id, details);
+            this.setState(details);
         }
     }
 
     getDetails() {
         const google = window.google;
         const {id} = this.props.match.params;
+
+        const cached = getCachedRestaurant(id);
+        if (cached) {
+            this.setState(cached);
+            return;
+        }
+
         var request = {
             placeId: id,
             fields: [
